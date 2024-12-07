@@ -1,13 +1,11 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/b3gllq093c8ex5ew?svg=true)](https://ci.appveyor.com/project/capnspacehook/taskmaster)
-[![Go Report Card](https://goreportcard.com/badge/github.com/capnspacehook/taskmaster)](https://goreportcard.com/report/github.com/capnspacehook/taskmaster)
-[![PkgGoDev](https://pkg.go.dev/badge/github.com/capnspacehook/taskmaster)](https://pkg.go.dev/github.com/capnspacehook/taskmaster)
+[![Build status](https://ci.appveyor.com/api/projects/status/b3gllq093c8ex5ew?svg=true)](https://ci.appveyor.com/project/Fast-IQ/taskmaster)
+[![Go Report Card](https://goreportcard.com/badge/github.com/Fast-IQ/taskmaster)](https://goreportcard.com/report/github.com/Fast-IQ/taskmaster)
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/Fast-IQ/taskmaster)](https://pkg.go.dev/github.com/Fst-IQ/taskmaster)
 
 # taskmaster
 Windows Task Scheduler Library for Go
 
 **NOTE:** the API is *not* stable, I reserve the right to change it before v1.0. Task Scheduler is complex, and it is difficult to create a sane, useable interface for it. I would highly encourage you to make use of Go modules and pin a specific commit.
-
-![taskmaster villain](img/taskmaster.jpg "Taskmaster")
 
 # What is taskmaster?
 

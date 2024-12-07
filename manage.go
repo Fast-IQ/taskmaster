@@ -1,4 +1,4 @@
-// +build windows
+//go:build windows
 
 package taskmaster
 
@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	ole "github.com/go-ole/go-ole"
+	"github.com/go-ole/go-ole"
 	"github.com/go-ole/go-ole/oleutil"
 	"github.com/rickb777/date/period"
 )
@@ -29,12 +29,12 @@ func (t *TaskService) initialize() error {
 		}
 	}
 
-	schedClassID, err := ole.ClassIDFrom("Schedule.Service.1")
+	scheduleClassID, err := ole.ClassIDFrom("Schedule.Service.1")
 	if err != nil {
 		ole.CoUninitialize()
 		return getTaskSchedulerError(err)
 	}
-	taskSchedulerObj, err := ole.CreateInstance(schedClassID, nil)
+	taskSchedulerObj, err := ole.CreateInstance(scheduleClassID, nil)
 	if err != nil {
 		ole.CoUninitialize()
 		return getTaskSchedulerError(err)
@@ -45,8 +45,8 @@ func (t *TaskService) initialize() error {
 	}
 	defer taskSchedulerObj.Release()
 
-	tskSchdlr := taskSchedulerObj.MustQueryInterface(ole.IID_IDispatch)
-	t.taskServiceObj = tskSchdlr
+	taskServiceObj := taskSchedulerObj.MustQueryInterface(ole.IID_IDispatch)
+	t.taskServiceObj = taskServiceObj
 	t.isInitialized = true
 
 	return nil
@@ -130,10 +130,11 @@ func (t *TaskService) Disconnect() {
 func (t *TaskService) GetRunningTasks() (RunningTaskCollection, error) {
 	var runningTasks RunningTaskCollection
 
-	res, err := oleutil.CallMethod(t.taskServiceObj, "GetRunningTasks", TASK_ENUM_HIDDEN)
+	res, err := oleutil.CallMethod(t.taskServiceObj, "GetRunningTasks", int(TASK_ENUM_HIDDEN))
 	if err != nil {
 		return nil, fmt.Errorf("error getting running tasks: %v", getTaskSchedulerError(err))
 	}
+	defer func() { _ = res.Clear() }()
 	runningTasksObj := res.ToIDispatch()
 	defer runningTasksObj.Release()
 	err = oleutil.ForEach(runningTasksObj, func(v *ole.VARIANT) error {
@@ -673,7 +674,7 @@ func (t *TaskService) taskFolderExist(path string) bool {
 		if getOLEErrorCode(err) == 0x80070002 {
 			return false
 		}
-		// trying to get the task folder resulted in an error, but the task foler
+		// trying to get the task folder resulted in an error, but the task folder
 		// technically exists, so we'll return true
 		return true
 	}

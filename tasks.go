@@ -1,4 +1,4 @@
-// +build windows
+//go:build windows
 
 package taskmaster
 
@@ -18,7 +18,7 @@ func (d *Definition) AddTrigger(trigger Trigger) {
 	d.Triggers = append(d.Triggers, trigger)
 }
 
-// Refresh refreshes all of the local instance variables of the running task.
+// Refresh refreshes all the local instance variables of the running task.
 // https://docs.microsoft.com/en-us/windows/desktop/api/taskschd/nf-taskschd-irunningtask-refresh
 func (r RunningTask) Refresh() error {
 	_, err := oleutil.CallMethod(r.taskObj, "Refresh")
@@ -74,7 +74,7 @@ func (r *RegisteredTask) RunEx(args []string, flags TaskRunFlags, sessionID int,
 	return parseRunningTask(runningTaskObj.ToIDispatch())
 }
 
-// GetInstances returns all of the currently running instances of a registered task.
+// GetInstances returns all the currently running instances of a registered task.
 // https://docs.microsoft.com/en-us/windows/desktop/api/taskschd/nf-taskschd-iregisteredtask-getinstances
 func (r *RegisteredTask) GetInstances() (RunningTaskCollection, error) {
 	runningTasks, err := oleutil.CallMethod(r.taskObj, "GetInstances", 0)

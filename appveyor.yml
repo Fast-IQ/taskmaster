@@ -1,8 +1,8 @@
 version: "1.0.{build}"
 
-stack: go 1.15
+stack: go 1.20
 
-clone_folder: c:\gopath\src\github.com\capnspacehook\taskmaster
+clone_folder: c:\gopath\src\github.com\Fast-IQ\taskmaster
 
 environment:
   GOPATH: c:\gopath
@@ -24,9 +24,9 @@ platform:
   - x64
 
 build_script:
-  - cd c:\gopath\src\github.com\capnspacehook\taskmaster
+  - cd c:\gopath\src\github.com\Fast-IQ\taskmaster
   - go build
 
 test_script:
-  - cd c:\gopath\src\github.com\capnspacehook\taskmaster
+  - cd c:\gopath\src\github.com\Fast-IQ\taskmaster
   - go test -cover

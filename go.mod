@@ -1,8 +1,13 @@
-module github.com/capnspacehook/taskmaster
+module github.com/Fast-IQ/taskmaster
 
-go 1.12
+go 1.23.3
 
 require (
-	github.com/go-ole/go-ole v1.2.4
-	github.com/rickb777/date v1.14.2
+	github.com/go-ole/go-ole v1.3.0
+	github.com/rickb777/date v1.21.1
+)
+
+require (
+	github.com/rickb777/plural v1.4.2 // indirect
+	golang.org/x/sys v0.28.0 // indirect
 )

@@ -1,8 +1,9 @@
-// +build windows
+//go:build windows
 
 package taskmaster
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 	"syscall"
@@ -71,11 +72,8 @@ const (
 func (d DayInterval) String() string {
 	if d == EveryDay {
 		return "Every day"
-	} else if d == EveryOtherDay {
-		return "Every other day"
 	}
-
-	return "Invalid day interval"
+	return fmt.Sprintf("Every %d days", d)
 }
 
 // DayOfMonth is a day of a month.
@@ -260,11 +258,8 @@ const (
 func (w WeekInterval) String() string {
 	if w == EveryWeek {
 		return "Every week"
-	} else if w == EveryOtherWeek {
-		return "Every other week"
 	}
-
-	return "Invalid week interval"
+	return fmt.Sprintf("Every %d weeks", w)
 }
 
 // TaskActionType specifies the type of a task action.
@@ -678,9 +673,9 @@ type Action interface {
 // https://docs.microsoft.com/en-us/windows/desktop/api/taskschd/nn-taskschd-iexecaction
 type ExecAction struct {
 	ID         string
-	Path       string
-	Args       string
-	WorkingDir string
+	Path       string //Program or script
+	Args       string //Arguments (not necessary)
+	WorkingDir string //Work directory (not necessary)
 }
 
 // ComHandlerAction is an action that fires a COM handler. Can only be used if TASK_COMPATIBILITY_V2 or above is set.

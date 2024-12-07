@@ -1,4 +1,4 @@
-// +build windows
+//go:build windows
 
 package taskmaster
 
@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"time"
 
-	ole "github.com/go-ole/go-ole"
+	"github.com/go-ole/go-ole"
 	"github.com/go-ole/go-ole/oleutil"
 )
 
@@ -394,7 +394,7 @@ func parseTaskTrigger(trigger *ole.IDispatch) (Trigger, error) {
 		defer valueQueriesObj.Release()
 
 		valQueryMap := make(map[string]string)
-		oleutil.ForEach(valueQueriesObj, func(v *ole.VARIANT) error {
+		err = oleutil.ForEach(valueQueriesObj, func(v *ole.VARIANT) error {
 			valueQuery := v.ToIDispatch()
 			defer valueQuery.Release()
 
@@ -405,6 +405,9 @@ func parseTaskTrigger(trigger *ole.IDispatch) (Trigger, error) {
 
 			return nil
 		})
+		if err != nil {
+			return nil, fmt.Errorf("error parsing IEventTrigger object: error parsing value field: %v", err)
+		}
 
 		eventTrigger := EventTrigger{
 			TaskTrigger:  taskTriggerObj,
@@ -488,12 +491,12 @@ func parseTaskTrigger(trigger *ole.IDispatch) (Trigger, error) {
 		if err != nil {
 			return nil, fmt.Errorf("error parsing ITimeTrigger object: error parsing RandomDelay field: %v", err)
 		}
-		timetrigger := TimeTrigger{
+		timeTrigger := TimeTrigger{
 			TaskTrigger: taskTriggerObj,
 			RandomDelay: randomDelay,
 		}
 
-		return timetrigger, nil
+		return timeTrigger, nil
 	case TASK_TRIGGER_WEEKLY:
 		daysOfWeek := DayOfWeek(oleutil.MustGetProperty(trigger, "DaysOfWeek").Val)
 		randomDelay, err := StringToPeriod(oleutil.MustGetProperty(trigger, "RandomDelay").ToString())

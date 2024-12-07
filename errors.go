@@ -1,4 +1,4 @@
-// +build windows
+//go:build windows
 
 package taskmaster
 
@@ -6,7 +6,7 @@ import (
 	"errors"
 	"syscall"
 
-	ole "github.com/go-ole/go-ole"
+	"github.com/go-ole/go-ole"
 )
 
 var (

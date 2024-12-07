@@ -1,4 +1,4 @@
-// +build windows
+//go:build windows
 
 package taskmaster
 
@@ -95,7 +95,7 @@ func TestGetInstancesRegisteredTask(t *testing.T) {
 		t.Fatalf("should have 5 instances, got %d instead", len(instances))
 	}
 
-	runningTasks.Stop()
+	func() { _ = runningTasks.Stop() }()
 	instances.Release()
 }
 
