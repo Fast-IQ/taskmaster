@@ -8,6 +8,7 @@ require (
 )
 
 require (
+	github.com/onsi/gomega v1.36.0 // indirect
 	github.com/rickb777/plural v1.4.2 // indirect
 	golang.org/x/sys v0.28.0 // indirect
 )

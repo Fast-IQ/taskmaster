@@ -52,7 +52,7 @@ func validateTriggers(triggers []Trigger) error {
 		case DailyTrigger:
 			if t.GetStartBoundary() == defaultTime {
 				return errors.New("invalid DailyTrigger: StartBoundary is required")
-			} else if t.DayInterval > EveryOtherDay {
+			} else if t.DayInterval > 255 {
 				return errors.New("invalid DailyTrigger: invalid DayInterval")
 			}
 
@@ -88,7 +88,7 @@ func validateTriggers(triggers []Trigger) error {
 		case MonthlyTrigger:
 			if t.GetStartBoundary() == defaultTime {
 				return errors.New("invalid MonthlyTrigger: StartBoundary is required")
-			} else if t.DaysOfMonth == 0 {
+			} else if t.DaysOfMonth == 0 && !t.RunOnLastDayOfMonth {
 				return errors.New("invalid MonthlyTrigger: DaysOfMonth is required")
 			} else if t.DaysOfMonth > AllDaysOfMonth {
 				return errors.New("invalid MonthlyTrigger: invalid DaysOfMonth")
@@ -114,7 +114,7 @@ func validateTriggers(triggers []Trigger) error {
 				return errors.New("invalid WeeklyTrigger: invalid DaysOfWeek")
 			} else if t.WeekInterval == 0 {
 				return errors.New("invalid WeeklyTrigger: WeekInterval is required")
-			} else if t.WeekInterval > EveryOtherWeek {
+			} else if t.WeekInterval > 25 {
 				return errors.New("invalid WeeklyTrigger: invalid WeekInterval")
 			}
 

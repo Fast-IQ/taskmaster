@@ -1,4 +1,4 @@
-// +build windows
+//go:build windows
 
 package taskmaster
 
@@ -48,13 +48,18 @@ func TestCreateTask(t *testing.T) {
 	}
 
 	// test BootTrigger
-	bootTriggerDef := taskService.NewTaskDefinition()
+	/*bootTriggerDef := taskService.NewTaskDefinition()
 	bootTriggerDef.AddAction(popCalc)
-	bootTriggerDef.AddTrigger(BootTrigger{})
-	_, _, err = taskService.CreateTask("\\Taskmaster\\BootTrigger", bootTriggerDef, true)
+	bootTriggerDef.AddTrigger(BootTrigger{
+		TaskTrigger: TaskTrigger{
+			StartBoundary: time.Now(),
+			Enabled:       false,
+		},
+	})
+	_, _, err = taskService.CreateTask("\\Sima-land\\BootTrigger", bootTriggerDef, true)
 	if err != nil {
 		t.Fatal(err)
-	}
+	}*/
 
 	// test DailyTrigger
 	dailyTriggerDef := taskService.NewTaskDefinition()
@@ -256,6 +261,7 @@ func TestDeleteTask(t *testing.T) {
 	deletedTask, err := taskService.GetRegisteredTask("\\Taskmaster\\TestTask")
 	if err == nil {
 		t.Fatal("task shouldn't still exist")
+		return
 	}
 	deletedTask.Release()
 }

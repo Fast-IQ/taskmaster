@@ -4,7 +4,6 @@ package taskmaster
 
 import (
 	"fmt"
-
 	"github.com/go-ole/go-ole"
 	"github.com/go-ole/go-ole/oleutil"
 )
@@ -140,7 +139,6 @@ func fillTaskTriggersObj(triggers []Trigger, triggersObj *ole.IDispatch) error {
 			if err != nil {
 				return fmt.Errorf("error creating ITrigger object: %v", getTaskSchedulerError(err))
 			}
-			defer func() { _ = res.Clear() }()
 			triggerObj := res.ToIDispatch()
 			defer triggerObj.Release()
 
@@ -209,7 +207,7 @@ func fillTaskTriggersObj(triggers []Trigger, triggersObj *ole.IDispatch) error {
 				oleutil.MustPutProperty(monthlyTriggerObj, "DaysOfMonth", uint(t.DaysOfMonth))
 				oleutil.MustPutProperty(monthlyTriggerObj, "MonthsOfYear", uint(t.MonthsOfYear))
 				oleutil.MustPutProperty(monthlyTriggerObj, "RandomDelay", t.RandomDelay.String())
-				oleutil.MustPutProperty(monthlyTriggerObj, "RunOnLastDayOfMonth", t.RunOnLastWeekOfMonth)
+				oleutil.MustPutProperty(monthlyTriggerObj, "RunOnLastDayOfMonth", t.RunOnLastDayOfMonth)
 			case RegistrationTrigger:
 				registrationTriggerObj := triggerObj.MustQueryInterface(ole.NewGUID("{4c8fec3a-c218-4e0c-b23d-629024db91a2}"))
 				defer registrationTriggerObj.Release()
