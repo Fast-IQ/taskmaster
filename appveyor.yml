@@ -1,6 +1,6 @@
 version: "1.0.{build}"
 
-stack: go 1.20
+stack: go 1.23
 
 clone_folder: c:\gopath\src\github.com\Fast-IQ\taskmaster
 
