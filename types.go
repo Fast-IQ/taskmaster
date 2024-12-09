@@ -35,7 +35,24 @@ func (d DayOfWeek) String() string {
 	}
 
 	var buf strings.Builder
-	if Sunday&d == Sunday {
+	switch d {
+	case Sunday:
+		buf.WriteString("Sunday, ")
+	case Monday:
+		buf.WriteString("Monday, ")
+	case Tuesday:
+		buf.WriteString("Tuesday, ")
+	case Wednesday:
+		buf.WriteString("Wednesday, ")
+	case Thursday:
+		buf.WriteString("Thursday, ")
+	case Friday:
+		buf.WriteString("Friday, ")
+	case Saturday:
+		buf.WriteString("Saturday, ")
+	}
+
+	/*if Sunday&d == Sunday {
 		buf.WriteString("Sunday, ")
 	}
 	if Monday&d == Monday {
@@ -55,7 +72,7 @@ func (d DayOfWeek) String() string {
 	}
 	if Saturday&d == Saturday {
 		buf.WriteString("Saturday, ")
-	}
+	}*/
 
 	s := buf.String()
 	return s[:len(s)-2]
@@ -166,40 +183,30 @@ func (m Month) String() string {
 	}
 
 	var buf strings.Builder
-	if m&January == January {
+	switch m {
+	case January:
 		buf.WriteString("January, ")
-	}
-	if m&February == February {
+	case February:
 		buf.WriteString("February, ")
-	}
-	if m&March == March {
+	case March:
 		buf.WriteString("March, ")
-	}
-	if m&April == April {
+	case April:
 		buf.WriteString("April, ")
-	}
-	if m&May == May {
+	case May:
 		buf.WriteString("May, ")
-	}
-	if m&June == June {
+	case June:
 		buf.WriteString("June, ")
-	}
-	if m&July == July {
+	case July:
 		buf.WriteString("July, ")
-	}
-	if m&August == August {
+	case August:
 		buf.WriteString("August, ")
-	}
-	if m&September == September {
+	case September:
 		buf.WriteString("September, ")
-	}
-	if m&October == October {
+	case October:
 		buf.WriteString("October, ")
-	}
-	if m&November == November {
+	case November:
 		buf.WriteString("November, ")
-	}
-	if m&December == December {
+	case December:
 		buf.WriteString("December, ")
 	}
 
@@ -227,7 +234,19 @@ func (w Week) String() string {
 	}
 
 	var buf strings.Builder
-	if First&w == First {
+	switch w {
+	case First:
+		buf.WriteString("First, ")
+	case Second:
+		buf.WriteString("Second, ")
+	case Third:
+		buf.WriteString("Third, ")
+	case Fourth:
+		buf.WriteString("Fourth, ")
+	case LastWeek:
+		buf.WriteString("LastWeek, ")
+	}
+	/*if First&w == First {
 		buf.WriteString("First, ")
 	}
 	if Second&w == Second {
@@ -241,7 +260,7 @@ func (w Week) String() string {
 	}
 	if LastWeek&w == LastWeek {
 		buf.WriteString("LastWeek, ")
-	}
+	}*/
 
 	s := buf.String()
 	return s[:len(s)-2]
