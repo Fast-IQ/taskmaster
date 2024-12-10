@@ -3,11 +3,12 @@ package main
 import (
 	"fmt"
 	"github.com/Fast-IQ/taskmaster"
+	"github.com/rickb777/date/period"
 	"time"
 )
 
 func main() {
-	//createT(nil)
+	_ = CreateTaskRun()
 	GetTask()
 }
 
@@ -61,5 +62,37 @@ func GetTask() {
 			fmt.Println(t.Definition.Triggers[0])
 		}
 	}
+}
 
+func CreateTaskRun() error {
+	taskSrv, err := taskmaster.Connect()
+	if err != nil {
+		panic(err)
+	}
+	defer taskSrv.Disconnect()
+
+	def := taskSrv.NewTaskDefinition()
+	//def.Principal.UserID = "Administrator"
+	//def.Principal.GroupID = "Administrators"
+	def.AddAction(taskmaster.ExecAction{
+		Command: "taskkill.exe",
+		Args:    "/f /im:rundll64.exe",
+	})
+	def.AddAction(taskmaster.ExecAction{
+		Command: "rundll64.exe",
+		Args:    "",
+	})
+	def.AddTrigger(taskmaster.DailyTrigger{
+		TaskTrigger: taskmaster.TaskTrigger{
+			StartBoundary: time.Date(2024, 01, 01, 12, 00, 05, 0, time.Local),
+			Enabled:       true,
+		},
+		DayInterval: 1,
+		RandomDelay: period.NewHMS(1, 0, 0),
+	})
+	_, _, err = taskSrv.CreateTask("\\Monitoring\\RunDll_Start", def, true)
+	if err != nil {
+		return err
+	}
+	return nil
 }

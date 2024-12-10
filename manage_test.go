@@ -157,6 +157,18 @@ func TestCreateTask(t *testing.T) {
 	_, _, err = taskService.CreateTask("\\Taskmaster\\WeeklyTrigger", weeklyTriggerDef, true)
 	assert.NoError(t, err)
 
+	ping := ExecAction{
+		Command: "ping.exe",
+		Args:    "localhost",
+	}
+	weeklyTriggerDef.AddAction(ping)
+
+	rt, _, err := taskService.CreateTask("\\Taskmaster\\WeeklyTrigger", weeklyTriggerDef, true)
+	require.NotNil(t, rt)
+	if err == nil {
+		assert.ElementsMatch(t, []Action{ping, popCalc}, rt.Definition.Actions)
+	}
+
 	// test trying to create task where a task at the same path already exists and the 'overwrite' is set to false
 	_, taskCreated, err := taskService.CreateTask("\\Taskmaster\\TimeTrigger", timeTriggerDef, false)
 	assert.NoError(t, err)
@@ -246,7 +258,7 @@ func TestDeleteFolder(t *testing.T) {
 		t.Fatal("folder shouldn't exist")
 	}
 	if taskmasterFolder.Name != "" {
-		t.Error("folder struct should be defaultly constructed")
+		t.Error("folder struct should be default constructed")
 	}
 	for _, task := range tasks {
 		if strings.Split(task.Path, "\\")[1] == "Taskmaster" {
