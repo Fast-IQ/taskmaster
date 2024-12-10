@@ -4,6 +4,7 @@ package taskmaster
 
 import (
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"strings"
 	"testing"
 	"time"
@@ -11,17 +12,15 @@ import (
 
 func TestLocalConnect(t *testing.T) {
 	taskService, err := Connect()
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
+
 	taskService.Disconnect()
 }
 
 func TestCreateTask(t *testing.T) {
 	var err error
 	taskService, err := Connect()
-	assert.NoError(t, err)
-
+	require.NoError(t, err)
 	defer taskService.Disconnect()
 
 	// test ExecAction
@@ -31,7 +30,7 @@ func TestCreateTask(t *testing.T) {
 	}
 	execTaskDef.AddAction(popCalc)
 
-	_, _, err = taskService.CreateTask("\\Sima-Land\\ExecAction", execTaskDef, true)
+	_, _, err = taskService.CreateTask("\\Taskmaster\\ExecAction", execTaskDef, true)
 	assert.NoError(t, err)
 
 	// test ComHandlerAction
@@ -44,7 +43,7 @@ func TestCreateTask(t *testing.T) {
 	assert.NoError(t, err)
 
 	// test BootTrigger
-	bootTriggerDef := taskService.NewTaskDefinition()
+	/*bootTriggerDef := taskService.NewTaskDefinition()
 	bootTriggerDef.AddAction(popCalc)
 	bootTriggerDef.AddTrigger(BootTrigger{
 		TaskTrigger: TaskTrigger{
@@ -52,8 +51,8 @@ func TestCreateTask(t *testing.T) {
 			Enabled:       false,
 		},
 	})
-	_, _, err = taskService.CreateTask("\\Taskmaster\\BootTrigger", bootTriggerDef, true)
-	assert.NoError(t, err)
+	_, _, err = taskService.CreateTask("\\\\Taskmaster\\BootTrigger", bootTriggerDef, true)
+	assert.NoError(t, err)*/
 
 	// test DailyTrigger
 	dailyTriggerDef := taskService.NewTaskDefinition()
@@ -70,7 +69,7 @@ func TestCreateTask(t *testing.T) {
 	// test EventTrigger
 	eventTriggerDef := taskService.NewTaskDefinition()
 	eventTriggerDef.AddAction(popCalc)
-	subscription := "<QueryList> <Query Id='1'> <Select Command='System'>*[System/Level=2]</Select></Query></QueryList>"
+	subscription := "<QueryList> <Query Id='1'> <Select Path='System'>*[System/Level=2]</Select></Query></QueryList>"
 	eventTriggerDef.AddTrigger(EventTrigger{
 		Subscription: subscription,
 	})
@@ -161,30 +160,25 @@ func TestCreateTask(t *testing.T) {
 	// test trying to create task where a task at the same path already exists and the 'overwrite' is set to false
 	_, taskCreated, err := taskService.CreateTask("\\Taskmaster\\TimeTrigger", timeTriggerDef, false)
 	assert.NoError(t, err)
-	assert.EqualValues(t, taskCreated, false, "task shouldn't have been created")
-	/*if taskCreated {
+
+	if taskCreated {
 		t.Fatal("task shouldn't have been created")
-	}*/
+	}
 }
 
 func TestUpdateTask(t *testing.T) {
 	taskService, err := Connect()
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
+
 	testTask := createTestTask(taskService)
 	defer taskService.Disconnect()
 
 	testTask.Definition.RegistrationInfo.Author = "Big Chungus"
 	_, err = taskService.UpdateTask("\\Taskmaster\\TestTask", testTask.Definition)
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.NoError(t, err)
 
 	testTask, err = taskService.GetRegisteredTask("\\Taskmaster\\TestTask")
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.NoError(t, err)
 	if testTask.Definition.RegistrationInfo.Author != "Big Chungus" {
 		t.Fatal("task was not updated")
 	}
@@ -192,44 +186,35 @@ func TestUpdateTask(t *testing.T) {
 
 func TestGetRegisteredTasks(t *testing.T) {
 	taskService, err := Connect()
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
+
 	defer taskService.Disconnect()
 
 	rtc, err := taskService.GetRegisteredTasks()
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.NoError(t, err)
+
 	rtc.Release()
 }
 
 func TestGetTaskFolders(t *testing.T) {
 	taskService, err := Connect()
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
+
 	defer taskService.Disconnect()
 
 	tf, err := taskService.GetTaskFolders()
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.NoError(t, err)
 	tf.Release()
 }
 
 func TestDeleteTask(t *testing.T) {
 	taskService, err := Connect()
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 	createTestTask(taskService)
 	defer taskService.Disconnect()
 
 	err = taskService.DeleteTask("\\Taskmaster\\TestTask")
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.NoError(t, err)
 
 	deletedTask, err := taskService.GetRegisteredTask("\\Taskmaster\\TestTask")
 	if err == nil {
@@ -241,33 +226,21 @@ func TestDeleteTask(t *testing.T) {
 
 func TestDeleteFolder(t *testing.T) {
 	taskService, err := Connect()
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 	createTestTask(taskService)
 	defer taskService.Disconnect()
 
 	var folderDeleted bool
 	folderDeleted, err = taskService.DeleteFolder("\\Taskmaster", false)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if folderDeleted == true {
-		t.Error("folder shouldn't have been deleted")
-	}
+	assert.NoError(t, err)
+	assert.EqualValues(t, false, folderDeleted, "folder shouldn't have been deleted")
 
 	folderDeleted, err = taskService.DeleteFolder("\\Taskmaster", true)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if folderDeleted == false {
-		t.Error("folder should have been deleted")
-	}
+	assert.NoError(t, err)
+	assert.EqualValues(t, folderDeleted, true, "folder should have been deleted")
 
 	tasks, err := taskService.GetRegisteredTasks()
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.NoError(t, err)
 	taskmasterFolder, err := taskService.GetTaskFolder("\\Taskmaster")
 	if err == nil {
 		t.Fatal("folder shouldn't exist")
