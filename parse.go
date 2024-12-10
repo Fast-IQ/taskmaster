@@ -163,7 +163,7 @@ func parseTaskAction(action *ole.IDispatch) (Action, error) {
 
 		execAction := ExecAction{
 			ID:         id,
-			Path:       path,
+			Command:    path,
 			Args:       args,
 			WorkingDir: workingDir,
 		}

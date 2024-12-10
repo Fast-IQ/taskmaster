@@ -692,7 +692,7 @@ type Action interface {
 // https://docs.microsoft.com/en-us/windows/desktop/api/taskschd/nn-taskschd-iexecaction
 type ExecAction struct {
 	ID         string
-	Path       string //Program or script
+	Command    string //Program or script
 	Args       string //Arguments (not necessary)
 	WorkingDir string //Work directory (not necessary)
 }

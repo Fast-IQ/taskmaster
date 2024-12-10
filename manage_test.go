@@ -3,6 +3,7 @@
 package taskmaster
 
 import (
+	"github.com/stretchr/testify/assert"
 	"strings"
 	"testing"
 	"time"
@@ -19,22 +20,19 @@ func TestLocalConnect(t *testing.T) {
 func TestCreateTask(t *testing.T) {
 	var err error
 	taskService, err := Connect()
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.NoError(t, err)
+
 	defer taskService.Disconnect()
 
 	// test ExecAction
 	execTaskDef := taskService.NewTaskDefinition()
 	popCalc := ExecAction{
-		Path: "calc.exe",
+		Command: "calc.exe",
 	}
 	execTaskDef.AddAction(popCalc)
 
-	_, _, err = taskService.CreateTask("\\Taskmaster\\ExecAction", execTaskDef, true)
-	if err != nil {
-		t.Fatal(err)
-	}
+	_, _, err = taskService.CreateTask("\\Sima-Land\\ExecAction", execTaskDef, true)
+	assert.NoError(t, err)
 
 	// test ComHandlerAction
 	comHandlerDef := taskService.NewTaskDefinition()
@@ -43,12 +41,10 @@ func TestCreateTask(t *testing.T) {
 	})
 
 	_, _, err = taskService.CreateTask("\\Taskmaster\\ComHandlerAction", comHandlerDef, true)
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.NoError(t, err)
 
 	// test BootTrigger
-	/*bootTriggerDef := taskService.NewTaskDefinition()
+	bootTriggerDef := taskService.NewTaskDefinition()
 	bootTriggerDef.AddAction(popCalc)
 	bootTriggerDef.AddTrigger(BootTrigger{
 		TaskTrigger: TaskTrigger{
@@ -56,10 +52,8 @@ func TestCreateTask(t *testing.T) {
 			Enabled:       false,
 		},
 	})
-	_, _, err = taskService.CreateTask("\\Sima-land\\BootTrigger", bootTriggerDef, true)
-	if err != nil {
-		t.Fatal(err)
-	}*/
+	_, _, err = taskService.CreateTask("\\Taskmaster\\BootTrigger", bootTriggerDef, true)
+	assert.NoError(t, err)
 
 	// test DailyTrigger
 	dailyTriggerDef := taskService.NewTaskDefinition()
@@ -71,39 +65,31 @@ func TestCreateTask(t *testing.T) {
 		},
 	})
 	_, _, err = taskService.CreateTask("\\Taskmaster\\DailyTrigger", dailyTriggerDef, true)
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.NoError(t, err)
 
 	// test EventTrigger
 	eventTriggerDef := taskService.NewTaskDefinition()
 	eventTriggerDef.AddAction(popCalc)
-	subscription := "<QueryList> <Query Id='1'> <Select Path='System'>*[System/Level=2]</Select></Query></QueryList>"
+	subscription := "<QueryList> <Query Id='1'> <Select Command='System'>*[System/Level=2]</Select></Query></QueryList>"
 	eventTriggerDef.AddTrigger(EventTrigger{
 		Subscription: subscription,
 	})
 	_, _, err = taskService.CreateTask("\\Taskmaster\\EventTrigger", eventTriggerDef, true)
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.NoError(t, err)
 
 	// test IdleTrigger
 	idleTriggerDef := taskService.NewTaskDefinition()
 	idleTriggerDef.AddAction(popCalc)
 	idleTriggerDef.AddTrigger(IdleTrigger{})
 	_, _, err = taskService.CreateTask("\\Taskmaster\\IdleTrigger", idleTriggerDef, true)
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.NoError(t, err)
 
 	// test LogonTrigger
 	logonTriggerDef := taskService.NewTaskDefinition()
 	logonTriggerDef.AddAction(popCalc)
 	logonTriggerDef.AddTrigger(LogonTrigger{})
 	_, _, err = taskService.CreateTask("\\Taskmaster\\LogonTrigger", logonTriggerDef, true)
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.NoError(t, err)
 
 	// test MonthlyDOWTrigger
 	monthlyDOWTriggerDef := taskService.NewTaskDefinition()
@@ -117,9 +103,7 @@ func TestCreateTask(t *testing.T) {
 		},
 	})
 	_, _, err = taskService.CreateTask("\\Taskmaster\\MonthlyDOWTrigger", monthlyDOWTriggerDef, true)
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.NoError(t, err)
 
 	// test MonthlyTrigger
 	monthlyTriggerDef := taskService.NewTaskDefinition()
@@ -132,18 +116,14 @@ func TestCreateTask(t *testing.T) {
 		},
 	})
 	_, _, err = taskService.CreateTask("\\Taskmaster\\MonthlyTrigger", monthlyTriggerDef, true)
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.NoError(t, err)
 
 	// test RegistrationTrigger
 	registrationTriggerDef := taskService.NewTaskDefinition()
 	registrationTriggerDef.AddAction(popCalc)
 	registrationTriggerDef.AddTrigger(RegistrationTrigger{})
 	_, _, err = taskService.CreateTask("\\Taskmaster\\RegistrationTrigger", registrationTriggerDef, true)
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.NoError(t, err)
 
 	// test SessionStateChangeTrigger
 	sessionStateChangeTriggerDef := taskService.NewTaskDefinition()
@@ -152,9 +132,7 @@ func TestCreateTask(t *testing.T) {
 		StateChange: TASK_SESSION_LOCK,
 	})
 	_, _, err = taskService.CreateTask("\\Taskmaster\\SessionStateChangeTrigger", sessionStateChangeTriggerDef, true)
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.NoError(t, err)
 
 	// test TimeTrigger
 	timeTriggerDef := taskService.NewTaskDefinition()
@@ -165,9 +143,7 @@ func TestCreateTask(t *testing.T) {
 		},
 	})
 	_, _, err = taskService.CreateTask("\\Taskmaster\\TimeTrigger", timeTriggerDef, true)
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.NoError(t, err)
 
 	// test WeeklyTrigger
 	weeklyTriggerDef := taskService.NewTaskDefinition()
@@ -180,18 +156,15 @@ func TestCreateTask(t *testing.T) {
 		},
 	})
 	_, _, err = taskService.CreateTask("\\Taskmaster\\WeeklyTrigger", weeklyTriggerDef, true)
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.NoError(t, err)
 
 	// test trying to create task where a task at the same path already exists and the 'overwrite' is set to false
 	_, taskCreated, err := taskService.CreateTask("\\Taskmaster\\TimeTrigger", timeTriggerDef, false)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if taskCreated {
+	assert.NoError(t, err)
+	assert.EqualValues(t, taskCreated, false, "task shouldn't have been created")
+	/*if taskCreated {
 		t.Fatal("task shouldn't have been created")
-	}
+	}*/
 }
 
 func TestUpdateTask(t *testing.T) {

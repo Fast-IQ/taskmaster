@@ -61,7 +61,7 @@ func fillActionsObj(actions []Action, actionsObj *ole.IDispatch) error {
 				defer exeActionObj.Release()
 
 				oleutil.MustPutProperty(exeActionObj, "Arguments", execAction.Args)
-				oleutil.MustPutProperty(exeActionObj, "Path", execAction.Path)
+				oleutil.MustPutProperty(exeActionObj, "Path", execAction.Command)
 				oleutil.MustPutProperty(exeActionObj, "WorkingDirectory", execAction.WorkingDir)
 			case TASK_ACTION_COM_HANDLER:
 				comHandlerAction := action.(ComHandlerAction)

@@ -522,7 +522,6 @@ func (t *TaskService) modifyTask(path string, newTaskDef Definition, username, p
 		return nil, fmt.Errorf("error filling ITaskDefinition: %v", err)
 	}
 
-	//	newTaskObj, err := oleutil.CallMethod(t.rootFolderObj, "RegisterTaskDefinition", path, newTaskDefObj, int(flags), username, password, int(logonType), "")
 	newTaskObj, err := oleutil.CallMethod(t.rootFolderObj, "RegisterTaskDefinition", path, newTaskDefObj, int(flags), username, password, int(logonType), "")
 	if err != nil {
 		return nil, fmt.Errorf("error registering task: %v", getTaskSchedulerError(err))

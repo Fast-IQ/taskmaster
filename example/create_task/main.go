@@ -30,7 +30,7 @@ func createT(trig taskmaster.Trigger) {
 	def.AddTrigger(trig)
 
 	act := taskmaster.ExecAction{
-		Path: "notepad.exe",
+		Command: "notepad.exe",
 	}
 	def.AddAction(act)
 

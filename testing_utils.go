@@ -5,8 +5,8 @@ package taskmaster
 func createTestTask(taskSvc TaskService) RegisteredTask {
 	newTaskDef := taskSvc.NewTaskDefinition()
 	newTaskDef.AddAction(ExecAction{
-		Path: "cmd.exe",
-		Args: "/c timeout $(Arg0)",
+		Command: "cmd.exe",
+		Args:    "/c timeout $(Arg0)",
 	})
 	newTaskDef.Settings.MultipleInstances = TASK_INSTANCES_PARALLEL
 
