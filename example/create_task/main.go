@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	_ = CreateTaskRun()
+	_ = CreateTaskRun2Action()
 	GetTask()
 }
 
@@ -35,7 +35,7 @@ func createT(trig taskmaster.Trigger) {
 	}
 	def.AddAction(act)
 
-	_, ok, err := taskSrv.CreateTask("\\Sima-Land\\NewTask2", def, true)
+	_, ok, err := taskSrv.CreateTask("\\Taskmaster\\NewTask2", def, true)
 	if ok {
 		fmt.Println("task created")
 	} else if err != nil {
@@ -50,7 +50,7 @@ func GetTask() {
 	}
 	defer taskSrv.Disconnect()
 
-	tf, err := taskSrv.GetTaskFolder("\\Sima-Land")
+	tf, err := taskSrv.GetTaskFolder("\\Taskmaster")
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -64,7 +64,7 @@ func GetTask() {
 	}
 }
 
-func CreateTaskRun() error {
+func CreateTaskRun2Action() error {
 	taskSrv, err := taskmaster.Connect()
 	if err != nil {
 		panic(err)
@@ -74,12 +74,13 @@ func CreateTaskRun() error {
 	def := taskSrv.NewTaskDefinition()
 	//def.Principal.UserID = "Administrator"
 	//def.Principal.GroupID = "Administrators"
+	def.Principal.LogonType = taskmaster.TASK_LOGON_INTERACTIVE_TOKEN_OR_PASSWORD
 	def.AddAction(taskmaster.ExecAction{
 		Command: "taskkill.exe",
-		Args:    "/f /im:rundll64.exe",
+		Args:    "/f /im:run.exe",
 	})
 	def.AddAction(taskmaster.ExecAction{
-		Command: "rundll64.exe",
+		Command: "run.exe",
 		Args:    "",
 	})
 	def.AddTrigger(taskmaster.DailyTrigger{
@@ -90,7 +91,7 @@ func CreateTaskRun() error {
 		DayInterval: 1,
 		RandomDelay: period.NewHMS(1, 0, 0),
 	})
-	_, _, err = taskSrv.CreateTask("\\Monitoring\\RunDll_Start", def, true)
+	_, _, err = taskSrv.CreateTask("\\Taskmaster\\Run_Start", def, true)
 	if err != nil {
 		return err
 	}

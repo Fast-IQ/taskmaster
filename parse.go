@@ -357,6 +357,10 @@ func parseTaskTrigger(trigger *ole.IDispatch) (Trigger, error) {
 		StartBoundary: startBoundary,
 	}
 
+	return parseTaskType(trigger, triggerType, taskTriggerObj)
+}
+
+func parseTaskType(trigger *ole.IDispatch, triggerType TaskTriggerType, taskTriggerObj TaskTrigger) (Trigger, error) {
 	switch triggerType {
 	case TASK_TRIGGER_BOOT:
 		delay, err := StringToPeriod(oleutil.MustGetProperty(trigger, "Delay").ToString())

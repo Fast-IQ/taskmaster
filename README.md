@@ -1,6 +1,6 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/cgocumj4ay42yy8n?svg=true)](https://ci.appveyor.com/project/Fast-IQ/taskmaster)
 [![Go Report Card](https://goreportcard.com/badge/github.com/Fast-IQ/taskmaster)](https://goreportcard.com/report/github.com/Fast-IQ/taskmaster)
-[![PkgGoDev](https://pkg.go.dev/badge/github.com/Fast-IQ/taskmaster)](https://pkg.go.dev/github.com/Fst-IQ/taskmaster)
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/Fast-IQ/taskmaster)](https://pkg.go.dev/github.com/Fast-IQ/taskmaster)
 
 # taskmaster
 Windows Task Scheduler Library for Go
